@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Fat fingered a push to the main sorry!");
         }
     }
 }
