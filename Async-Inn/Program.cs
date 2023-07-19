@@ -1,10 +1,24 @@
-﻿namespace Async_Inn
+using Async_Inn.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace Async_Inn
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Fat fingered a push to the main sorry!");
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddControllers();
+            string connString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services
+                .AddDbContext<AsyncInnDBContext>
+                (opions => opions.UseSqlServer(connString));
+            var app = builder.Build();
+
+            app.MapGet("/", () => "Hello World!");
+            app.MapControllers();
+            app.Run();
         }
     }
 }
