@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Async_Inn.Migrations
 {
     [DbContext(typeof(AsyncInnDBContext))]
-    [Migration("20230719211535_Second")]
-    partial class Second
+    [Migration("20230802002740_HotelRoomAdd")]
+    partial class HotelRoomAdd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,47 +24,47 @@ namespace Async_Inn.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Async_Inn.Models.Aminity", b =>
+            modelBuilder.Entity("Async_Inn.Models.Amenity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.ToTable("Amenities");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ID = 1,
                             Name = "Free soap"
                         },
                         new
                         {
-                            Id = 2,
+                            ID = 2,
                             Name = "dining table"
                         },
                         new
                         {
-                            Id = 3,
+                            ID = 3,
                             Name = "PS5"
                         });
                 });
 
             modelBuilder.Entity("Async_Inn.Models.Hotel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -90,14 +90,14 @@ namespace Async_Inn.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.ToTable("Hotels");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ID = 1,
                             City = "Amman",
                             Country = "Jordan",
                             Name = "Four Seasons",
@@ -107,7 +107,7 @@ namespace Async_Inn.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            ID = 2,
                             City = "Amman",
                             Country = "Jordan",
                             Name = "Flower",
@@ -117,7 +117,7 @@ namespace Async_Inn.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            ID = 3,
                             City = "Amman",
                             Country = "Jordan",
                             Name = "Amman",
@@ -129,11 +129,11 @@ namespace Async_Inn.Migrations
 
             modelBuilder.Entity("Async_Inn.Models.HotelRoom", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("HotelID")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("RoomNumber")
+                        .HasColumnType("int");
 
                     b.Property<bool>("PetFriendly")
                         .HasColumnType("bit");
@@ -144,21 +144,20 @@ namespace Async_Inn.Migrations
                     b.Property<int>("RoomID")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomNumber")
-                        .HasColumnType("int");
+                    b.HasKey("HotelID", "RoomNumber");
 
-                    b.HasKey("Id");
+                    b.HasIndex("RoomID");
 
                     b.ToTable("HotelRooms");
                 });
 
             modelBuilder.Entity("Async_Inn.Models.Room", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<int>("Layout")
                         .HasColumnType("int");
@@ -167,45 +166,87 @@ namespace Async_Inn.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.ToTable("Rooms");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ID = 1,
                             Layout = 1,
                             Name = "PogChamp"
                         },
                         new
                         {
-                            Id = 2,
+                            ID = 2,
                             Layout = 2,
                             Name = "PeepoPlanket"
                         },
                         new
                         {
-                            Id = 3,
+                            ID = 3,
                             Layout = 3,
                             Name = "YEP"
                         });
                 });
 
-            modelBuilder.Entity("Async_Inn.Models.RoomAminity", b =>
+            modelBuilder.Entity("Async_Inn.Models.RoomAmenity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("RoomID")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("AmenityID")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoomID", "AmenityID");
+
+                    b.HasIndex("AmenityID");
 
                     b.ToTable("RoomAmenities");
+                });
+
+            modelBuilder.Entity("Async_Inn.Models.HotelRoom", b =>
+                {
+                    b.HasOne("Async_Inn.Models.Hotel", "Hotel")
+                        .WithMany()
+                        .HasForeignKey("HotelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Async_Inn.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hotel");
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("Async_Inn.Models.RoomAmenity", b =>
+                {
+                    b.HasOne("Async_Inn.Models.Amenity", "amenity")
+                        .WithMany()
+                        .HasForeignKey("AmenityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Async_Inn.Models.Room", "room")
+                        .WithMany("RoomAminities")
+                        .HasForeignKey("RoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("amenity");
+
+                    b.Navigation("room");
+                });
+
+            modelBuilder.Entity("Async_Inn.Models.Room", b =>
+                {
+                    b.Navigation("RoomAminities");
                 });
 #pragma warning restore 612, 618
         }

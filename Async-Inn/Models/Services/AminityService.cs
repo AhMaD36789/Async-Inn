@@ -13,8 +13,7 @@ namespace Async_Inn.Models.Services
             _context = context;
         }
 
-
-        public async Task<Aminity> Create(Aminity amenity)
+        public async Task<Amenity> Create(Amenity amenity)
         {
             _context.Amenities.Add(amenity);
             await _context.SaveChangesAsync();
@@ -23,7 +22,7 @@ namespace Async_Inn.Models.Services
 
         public async Task Delete(int id)
         {
-            Aminity amenity = await GetAmenity(id);
+            Amenity amenity = await GetAmenity(id);
             if (amenity != null)
             {
                 _context.Amenities.Remove(amenity);
@@ -31,21 +30,21 @@ namespace Async_Inn.Models.Services
             }
         }
 
-        public async Task<List<Aminity>> GetAmenities()
+        public async Task<List<Amenity>> GetAmenities()
         {
             var Amenities = await _context.Amenities.ToListAsync();
             return Amenities;
         }
 
-        public async Task<Aminity> GetAmenity(int amenityId)
+        public async Task<Amenity> GetAmenity(int amenityId)
         {
             var Amenity = await _context.Amenities.FindAsync(amenityId);
             return Amenity;
         }
 
-        public async Task<Aminity> UpdateAmenity(int id, Aminity UpdatedAmenity)
+        public async Task<Amenity> UpdateAmenity(int id, Amenity UpdatedAmenity)
         {
-            Aminity CurrentAmenity = await GetAmenity(id);
+            Amenity CurrentAmenity = await GetAmenity(id);
 
             if (CurrentAmenity != null)
             {

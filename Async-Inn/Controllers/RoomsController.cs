@@ -42,7 +42,7 @@ namespace Async_Inn.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom(int id, Room room)
         {
-            if (id != room.Id)
+            if (id != room.ID)
             {
                 return BadRequest();
             }
@@ -60,7 +60,7 @@ namespace Async_Inn.Controllers
             await _room.Create(room);
 
             // Rurtn a 201 Header to Browser or the postmane
-            return CreatedAtAction("GetRoom", new { id = room.Id }, room);
+            return CreatedAtAction("GetRoom", new { id = room.ID }, room);
         }
 
         // DELETE: api/Rooms/5
@@ -71,9 +71,21 @@ namespace Async_Inn.Controllers
             return NoContent();
         }
 
-        //private bool RoomExists(int id)
-        //{
-        //    return (_context.Rooms?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
+        [HttpPost]
+        //LINK: api/1/Amenity/1
+        [Route("{roomID}/Amenity/{amenityID}")]
+        public async Task<ActionResult<Room>> PostAmenityToRoom(int roomID, int amenityID)
+        {
+            var addedAmenity = await _room.AddAmenityToRoom(roomID, amenityID);
+            return Ok(addedAmenity);
+        }
+
+        [HttpDelete]
+        [Route("{roomID}/Amenity/{amenityID}")]
+        public async Task<ActionResult<Room>> DeleteAmenityFromRoom(int roomID, int amenityID)
+        {
+            await _room.RemoveAmenityFromoRoom(roomID, amenityID);
+            return NoContent();
+        }
     }
 }

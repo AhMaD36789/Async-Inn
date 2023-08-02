@@ -41,7 +41,7 @@ namespace Async_Inn.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
-            if (id != hotel.Id)
+            if (id != hotel.ID)
             {
                 return BadRequest();
             }
@@ -59,7 +59,7 @@ namespace Async_Inn.Controllers
             await _hotel.Create(hotel);
 
             // Rurtn a 201 Header to Browser or the postmane
-            return CreatedAtAction("GetHotel", new { id = hotel.Id }, hotel);
+            return CreatedAtAction("GetHotel", new { id = hotel.ID }, hotel);
         }
 
         // DELETE: api/Hotels/5
@@ -70,9 +70,6 @@ namespace Async_Inn.Controllers
             return NoContent();
         }
 
-        //private bool HotelExists(int id)
-        //{
-        //    return (_context.Hotels?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
+
     }
 }
