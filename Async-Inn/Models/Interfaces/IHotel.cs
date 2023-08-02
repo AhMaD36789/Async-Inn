@@ -2,7 +2,7 @@
 {
     public interface IHotel
     {
-Task<Hotel> Create(Hotel hotel);
+        Task<Hotel> Create(Hotel hotel);
 
         // GET All
         Task<List<Hotel>> GetHotels();
@@ -17,5 +17,6 @@ Task<Hotel> Create(Hotel hotel);
         // Delete 
 
         Task Delete(int id);
+
     }
 }

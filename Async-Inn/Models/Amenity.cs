@@ -1,8 +1,8 @@
 ﻿namespace Async_Inn.Models
 {
-    public class Aminity
+    public class Amenity
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Async_Inn.Models.Interfaces
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+
+namespace Async_Inn.Models.Interfaces
 {
     public interface IRoom
     {
@@ -17,5 +20,13 @@
         // Delete 
 
         Task Delete(int id);
+
+        //Add Amenity to Room
+
+        Task<RoomAmenity> AddAmenityToRoom(int roomID, int amenityID);
+
+        //Remove Amenity from Room
+
+        Task RemoveAmenityFromoRoom(int roomID, int amenityID);
     }
 }

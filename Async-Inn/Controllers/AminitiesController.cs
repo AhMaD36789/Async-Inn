@@ -24,14 +24,14 @@ namespace Async_Inn.Controllers
 
         // GET: api/Amenities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Aminity>>> GetAmenities()
+        public async Task<ActionResult<IEnumerable<Amenity>>> GetAmenities()
         {
             return await _amenity.GetAmenities();
         }
 
         // GET: api/Amenities/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Aminity>> GetAmenity(int id)
+        public async Task<ActionResult<Amenity>> GetAmenity(int id)
         {
             return await _amenity.GetAmenity(id);
         }
@@ -39,13 +39,8 @@ namespace Async_Inn.Controllers
         // PUT: api/Amenities/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAmenity(int id, Aminity amenity)
+        public async Task<IActionResult> PutAmenity(int id, Amenity amenity)
         {
-            if (id != amenity.Id)
-            {
-                return BadRequest();
-            }
-
             var updateAmenity = await _amenity.UpdateAmenity(id, amenity);
 
             return Ok(updateAmenity);
@@ -54,12 +49,12 @@ namespace Async_Inn.Controllers
         // POST: api/Amenities
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Aminity>> PostAmenity(Aminity amenity)
+        public async Task<ActionResult<Amenity>> PostAmenity(Amenity amenity)
         {
             await _amenity.Create(amenity);
 
             // Rurtn a 201 Header to Browser or the postmane
-            return CreatedAtAction("GetAmenity", new { id = amenity.Id }, amenity);
+            return CreatedAtAction("GetAmenity", new { id = amenity.ID }, amenity);
         }
 
         // DELETE: api/Amenities/5
@@ -69,10 +64,5 @@ namespace Async_Inn.Controllers
             await _amenity.Delete(id);
             return NoContent();
         }
-
-        //private bool AmenityExists(int id)
-        //{
-        //    return (_context.Amenities?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
     }
 }
