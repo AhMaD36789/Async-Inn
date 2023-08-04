@@ -5,7 +5,7 @@
         Task<HotelRoom> Create(HotelRoom hotelroom, int HotelID);
 
         // GET All
-        Task<List<HotelRoom>> GetHotelRooms();
+        Task<List<HotelRoom>> GetHotelRooms(int HotelID);
 
         // GET Hotel By Id
 

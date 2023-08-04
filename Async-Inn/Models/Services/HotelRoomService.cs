@@ -39,15 +39,22 @@ namespace Async_Inn.Models.Services
 
         public async Task<HotelRoom> GetHotelRoom(int HotelID, int RoomNumber)
         {
-            var HotelRoom = await _context.HotelRooms.FindAsync(HotelID, RoomNumber);
+            var HotelRoom = await _context.HotelRooms
+                .Include(x => x.Room)
+                .ThenInclude(x => x.RoomAminities)
+                .ThenInclude(x => x.amenity)
+                .FirstOrDefaultAsync(x => x.HotelID == HotelID && x.RoomNumber == RoomNumber);
             return HotelRoom;
         }
 
-        public async Task<List<HotelRoom>> GetHotelRooms()
+        public async Task<List<HotelRoom>> GetHotelRooms(int HotelID)
         {
-            var HotelRooms = await _context.HotelRooms
-                .Include(r => r.Hotel).Include(h => h.Room).ToListAsync();
-            return HotelRooms;
+            return await _context.HotelRooms
+                .Include(x => x.Room)
+                .ThenInclude(x => x.RoomAminities)
+                .ThenInclude(x => x.amenity)
+                .Where(x => x.HotelID == HotelID)
+                .ToListAsync();
         }
 
         public async Task<HotelRoom> UpdateHotelRoom(int HotelID, int RoomNumber, HotelRoom hotelroom)
@@ -57,13 +64,12 @@ namespace Async_Inn.Models.Services
 
             if (CurrentHotelRoom != null)
             {
-
                 CurrentHotelRoom.RoomNumber = hotelroom.RoomNumber;
                 CurrentHotelRoom.RoomID = hotelroom.RoomID;
                 CurrentHotelRoom.Rate = hotelroom.Rate;
                 CurrentHotelRoom.PetFriendly = hotelroom.PetFriendly;
+                _context.Entry(CurrentHotelRoom).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-
             }
             return CurrentHotelRoom;
         }
