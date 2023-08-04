@@ -49,6 +49,7 @@ namespace Async_Inn.Models.Services
             if (CurrentAmenity != null)
             {
                 CurrentAmenity.Name = UpdatedAmenity.Name;
+                _context.Entry(CurrentAmenity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             return CurrentAmenity;
