@@ -41,8 +41,12 @@ namespace Async_Inn.Models.Services
 
         public async Task<List<Hotel>> GetHotels()
         {
-            var Hotels = await _context.Hotels.ToListAsync();
-            return Hotels;
+            return await _context.Hotels
+                .Include(hotel => hotel.Rooms)
+                .ThenInclude(rooms => rooms.Room)
+                .ThenInclude(roomAmen => roomAmen.RoomAminities)
+                .ThenInclude(amen => amen.amenity)
+                .ToListAsync();
         }
 
         public async Task<Hotel> UpdateHotel(int id, Hotel UpdatedHotel)
