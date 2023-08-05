@@ -17,6 +17,7 @@ namespace Async_Inn.Models.Services
 
         public async Task<Hotel> Create(Hotel hotel)
         {
+
             _context.Hotels.Add(hotel);
             await _context.SaveChangesAsync();
             return hotel;
@@ -24,7 +25,7 @@ namespace Async_Inn.Models.Services
 
         public async Task Delete(int id)
         {
-            Hotel hotel = await GetHotel(id);
+            Hotel hotel = await _context.Hotels.FindAsync(id);
             if (hotel != null)
             {
                 _context.Hotels.Remove(hotel);
@@ -33,40 +34,94 @@ namespace Async_Inn.Models.Services
         }
 
 
-        public async Task<Hotel> GetHotel(int HotelId)
+        public async Task<HotelDTO> GetHotel(int HotelId)
         {
-            var Hotel = await _context.Hotels.FindAsync(HotelId);
+            var Hotel = await _context.Hotels.Select(
+                h => new HotelDTO
+                {
+                    ID = h.ID,
+                    Name = h.Name,
+                    City = h.City,
+                    State = h.State,
+                    Phone = h.Phone,
+                    HotelRooms = h.HotelRooms.Select(hr => new HotelRoomDTO
+                    {
+                        HotelID = hr.HotelID,
+                        RoomNumber = hr.RoomNumber,
+                        Rate = hr.Rate,
+                        PetFriendly = hr.PetFriendly,
+                        RoomID = hr.RoomID,
+                        Room = new RoomDTO
+                        {
+                            ID = hr.Room.ID,
+                            Name = hr.Room.Name,
+                            Layout = hr.Room.Layout,
+                            Amenities = hr.Room.RoomAminities
+                            .Select(a => new AmenityDTO
+                            {
+                                ID = a.amenity.ID,
+                                Name = a.amenity.Name,
+                            }
+                            ).ToList()
+                        }
+                    }).ToList()
+                }).FirstOrDefaultAsync(h => h.ID == HotelId);
+
+
             return Hotel;
         }
 
-        public async Task<List<Hotel>> GetHotels()
+        public async Task<List<HotelDTO>> GetHotels()
         {
-            return await _context.Hotels
-                .Include(hotel => hotel.Rooms)
-                .ThenInclude(rooms => rooms.Room)
-                .ThenInclude(roomAmen => roomAmen.RoomAminities)
-                .ThenInclude(amen => amen.amenity)
-                .ToListAsync();
+            var Hotel = await _context.Hotels.Select(
+                h => new HotelDTO
+                {
+                    ID = h.ID,
+                    Name = h.Name,
+                    City = h.City,
+                    State = h.State,
+                    Phone = h.Phone,
+                    HotelRooms = h.HotelRooms.Select(hr => new HotelRoomDTO
+                    {
+                        HotelID = hr.HotelID,
+                        RoomNumber = hr.RoomNumber,
+                        Rate = hr.Rate,
+                        PetFriendly = hr.PetFriendly,
+                        RoomID = hr.RoomID,
+                        Room = new RoomDTO
+                        {
+                            ID = hr.Room.ID,
+                            Name = hr.Room.Name,
+                            Layout = hr.Room.Layout,
+                            Amenities = hr.Room.RoomAminities
+                            .Select(a => new AmenityDTO
+                            {
+                                ID = a.amenity.ID,
+                                Name = a.amenity.Name,
+                            }
+                            ).ToList()
+                        }
+                    }).ToList()
+                }).ToListAsync();
+            return Hotel;
         }
 
         public async Task<Hotel> UpdateHotel(int id, Hotel UpdatedHotel)
         {
-            Hotel CurrentHotel = await GetHotel(id);
-
-
+            Hotel CurrentHotel = await _context.Hotels.FindAsync(id);
             if (CurrentHotel != null)
             {
-
                 CurrentHotel.Name = UpdatedHotel.Name;
                 CurrentHotel.StreetAddress = UpdatedHotel.StreetAddress;
                 CurrentHotel.City = UpdatedHotel.City;
                 CurrentHotel.State = UpdatedHotel.State;
                 CurrentHotel.Country = UpdatedHotel.Country;
                 CurrentHotel.Phone = UpdatedHotel.Phone;
+                _context.Entry(CurrentHotel).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
             }
-            return CurrentHotel;
+            return UpdatedHotel;
 
         }
     }

@@ -2,17 +2,18 @@
 {
     public interface IHotelRoom
     {
-        Task<HotelRoom> Create(HotelRoom hotelroom, int HotelID);
+        Task<HotelRoomDTO> Create(HotelRoomDTO hotelroom, int HotelID);
 
         // GET All
-        Task<List<HotelRoom>> GetHotelRooms(int HotelID);
+        Task<List<HotelRoomDTO>> GetHotelRooms(int HotelID);
+
 
         // GET Hotel By Id
 
-        Task<HotelRoom> GetHotelRoom(int HotelID, int RoomNumber);
+        Task<HotelRoomDTO> GetHotelRoom(int HotelID, int RoomNumber);
 
         // Update
-        Task<HotelRoom> UpdateHotelRoom(int HotelID, int RoomNumber, HotelRoom hotelroom);
+        Task<HotelRoomDTO> UpdateHotelRoom(int HotelID, int RoomNumber, HotelRoomDTO hotelroom);
 
         // Delete 
 

@@ -2,17 +2,17 @@
 {
     public interface IAminity
     {
-        Task<Amenity> Create(Amenity amenity);
+        Task<AmenityDTO> Create(AmenityDTO amenity);
 
         // GET All
-        Task<List<Amenity>> GetAmenities();
+        Task<List<AmenityDTO>> GetAmenities();
 
         // GET Amenity By Id
 
-        Task<Amenity> GetAmenity(int amenityId);
+        Task<AmenityDTO> GetAmenity(int amenityId);
 
         // Update
-        Task<Amenity> UpdateAmenity(int id, Amenity amenity);
+        Task<Amenity> UpdateAmenity(int id, AmenityDTO amenity);
 
         // Delete 
 
