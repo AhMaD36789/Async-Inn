@@ -34,7 +34,8 @@ namespace Async_Inn.Controllers
 
         //DELETE: api/Hotels/{HotelID}/Rooms/{RoomNumber}
 
-        [HttpDelete("{HotelID}/Rooms/{RoomNumber}")]
+        [HttpDelete]
+            [Route("/api/Hotels/{HotelID}/Rooms/{RoomNumber}")]
         public async Task<ActionResult> Delete(int HotelID, int RoomNumber)
         {
             _context.Delete(HotelID, RoomNumber);
@@ -63,7 +64,8 @@ namespace Async_Inn.Controllers
 
         //PUT: api/Hotels/{HotelID}/Rooms/{RoomNumber}
 
-        [HttpPut("{HotelID}/Rooms/{RoomNumber}")]
+        [HttpPut]
+        [Route("/api/Hotels/{HotelID}/Rooms/{RoomNumber}")]
         public async Task<HotelRoomDTO> UpdateHotelRoom(int HotelID, int RoomNumber, HotelRoomDTO hotelroom)
         {
             var currentHotelRoom = await _context.UpdateHotelRoom(HotelID, RoomNumber, hotelroom);

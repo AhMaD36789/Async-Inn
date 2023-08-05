@@ -19,6 +19,7 @@ namespace Async_Inn
                 .AddDbContext<AsyncInnDBContext>
                 (opions => opions.UseSqlServer(connString));
             builder.Services.AddTransient<IHotel, HotelService>();
+            builder.Services.AddTransient<IHotelRoom, HotelRoomService>();
             builder.Services.AddTransient<IRoom, RoomService>();
             builder.Services.AddTransient<IAminity, AminityService>();
             builder.Services.AddSwaggerGen(options =>
