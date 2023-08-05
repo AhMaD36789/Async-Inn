@@ -5,17 +5,17 @@ namespace Async_Inn.Models.Interfaces
 {
     public interface IRoom
     {
-        Task<Room> Create(Room room);
+        Task<Room> Create(RoomDTO room);
 
         // GET All
-        Task<List<Room>> GetRooms();
+        Task<List<RoomDTO>> GetRooms();
 
         // GET Room By Id
 
-        Task<Room> GetRoom(int roomId);
+        Task<RoomDTO> GetRoom(int roomId);
 
         // Update
-        Task<Room> UpdateRoom(int id, Room room);
+        Task<Room> UpdateRoom(int id, RoomDTO room);
 
         // Delete 
 

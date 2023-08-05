@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Async_Inn.Data;
 using Async_Inn.Models;
+using Async_Inn.Models.Interfaces;
 
 namespace Async_Inn.Controllers
 {
@@ -14,73 +15,59 @@ namespace Async_Inn.Controllers
     [ApiController]
     public class HotelRoomsController : ControllerBase
     {
-        private readonly AsyncInnDBContext _context;
+        private readonly IHotelRoom _context;
 
-        public HotelRoomsController(AsyncInnDBContext context)
+        public HotelRoomsController(IHotelRoom context)
         {
             _context = context;
         }
 
-        [HttpPost]
-        [Route("api/Hotels/{HotelID}/Rooms")]
-        public async Task<HotelRoom> Create(HotelRoom hotelroom, int HotelID)
+        //POST: api/Hotels/{HotelID}/{Rooms}
+
+        [HttpPost("/api/Hotels/{HotelID}/Rooms")]
+        public async Task<ActionResult> Create(HotelRoomDTO hotelroom, int HotelID)
         {
-            var room = await _context.Rooms.FindAsync(hotelroom.RoomID);
-            var hotel = await _context.Hotels.FindAsync(hotelroom.HotelID);
+            var addedHotelRoom = await _context.Create(hotelroom, HotelID);
+            return Ok(addedHotelRoom);
 
-            hotelroom.HotelID = HotelID;
-
-            hotelroom.Room = room;
-            hotelroom.Hotel = hotel;
-
-            _context.HotelRooms.Add(hotelroom);
-            await _context.SaveChangesAsync();
-            return hotelroom;
         }
-        [HttpDelete]
-        [Route("{HotelID}/Rooms/{RoomNumber}")]
-        public async Task Delete(int HotelID, int RoomNumber)
+
+        //DELETE: api/Hotels/{HotelID}/Rooms/{RoomNumber}
+
+        [HttpDelete("{HotelID}/Rooms/{RoomNumber}")]
+        public async Task<ActionResult> Delete(int HotelID, int RoomNumber)
         {
-            HotelRoom hotelroom = await GetHotelRoom(HotelID, RoomNumber);
-            if (hotelroom != null)
-            {
-                _context.HotelRooms.Remove(hotelroom);
-                await _context.SaveChangesAsync();
-            }
+            _context.Delete(HotelID, RoomNumber);
+            return NoContent();
         }
+
+        //GET: api/Hotels/{HotelID}/Rooms/{RoomNumber}
+
         [HttpGet]
-        [Route("{HotelID}/Rooms/{RoomNumber}")]
-        public async Task<HotelRoom> GetHotelRoom(int HotelID, int RoomNumber)
+        [Route("/api/Hotels/{HotelID}/Rooms/{RoomNumber}")]
+        public async Task<HotelRoomDTO> GetHotelRoom(int HotelID, int RoomNumber)
         {
-            var HotelRoom = await _context.HotelRooms.FindAsync(HotelID, RoomNumber);
+            var HotelRoom = await _context.GetHotelRoom(HotelID, RoomNumber);
             return HotelRoom;
         }
 
+        //GET: api/Hotels/{HotelID}/Rooms
+
         [HttpGet]
-        [Route("{HotelID}/Rooms")]
-        public async Task<List<HotelRoom>> GetHotelRooms()
+        [Route("/api/Hotels/{HotelID}/Rooms")]
+        public async Task<List<HotelRoomDTO>> GetHotelRooms(int HotelID)
         {
-            var HotelRooms = await _context.HotelRooms.Include(r => r.Hotel).Include(h => h.Room).ToListAsync();
+            var HotelRooms = await _context.GetHotelRooms(HotelID);
             return HotelRooms;
         }
-        [HttpPut]
-        [Route("{HotelID}/Rooms/{RoomNumber}")]
-        public async Task<HotelRoom> UpdateHotelRoom(int HotelID, int RoomNumber, HotelRoom hotelroom)
+
+        //PUT: api/Hotels/{HotelID}/Rooms/{RoomNumber}
+
+        [HttpPut("{HotelID}/Rooms/{RoomNumber}")]
+        public async Task<HotelRoomDTO> UpdateHotelRoom(int HotelID, int RoomNumber, HotelRoomDTO hotelroom)
         {
-            HotelRoom CurrentHotelRoom = await GetHotelRoom(HotelID, RoomNumber);
-
-
-            if (CurrentHotelRoom != null)
-            {
-
-                CurrentHotelRoom.RoomNumber = hotelroom.RoomNumber;
-                CurrentHotelRoom.RoomID = hotelroom.RoomID;
-                CurrentHotelRoom.Rate = hotelroom.Rate;
-                CurrentHotelRoom.PetFriendly = hotelroom.PetFriendly;
-                await _context.SaveChangesAsync();
-
-            }
-            return CurrentHotelRoom;
+            var currentHotelRoom = await _context.UpdateHotelRoom(HotelID, RoomNumber, hotelroom);
+            return hotelroom;
         }
     }
 }
