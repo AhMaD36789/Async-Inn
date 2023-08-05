@@ -116,6 +116,7 @@ namespace Async_Inn.Models.Services
                 ).ToListAsync();
 
             return HotelRooms;
+
         }
 
         public async Task<HotelRoomDTO> UpdateHotelRoom(int HotelID, int RoomNumber, HotelRoomDTO hotelroom)
@@ -126,13 +127,13 @@ namespace Async_Inn.Models.Services
             if (CurrentHotelRoom != null)
             {
                 CurrentHotelRoom.HotelID = hotelroom.HotelID;
+
                 CurrentHotelRoom.RoomNumber = hotelroom.RoomNumber;
                 CurrentHotelRoom.RoomID = hotelroom.RoomID;
                 CurrentHotelRoom.Rate = hotelroom.Rate;
                 CurrentHotelRoom.PetFriendly = hotelroom.PetFriendly;
                 _context.Entry(CurrentHotelRoom).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-
             }
             return hotelroom;
         }

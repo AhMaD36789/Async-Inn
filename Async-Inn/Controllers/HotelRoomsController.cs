@@ -34,12 +34,14 @@ namespace Async_Inn.Controllers
 
         //DELETE: api/Hotels/{HotelID}/Rooms/{RoomNumber}
 
+
         [HttpDelete]
             [Route("/api/Hotels/{HotelID}/Rooms/{RoomNumber}")]
         public async Task<ActionResult> Delete(int HotelID, int RoomNumber)
         {
             _context.Delete(HotelID, RoomNumber);
             return NoContent();
+
         }
 
         //GET: api/Hotels/{HotelID}/Rooms/{RoomNumber}
@@ -50,6 +52,7 @@ namespace Async_Inn.Controllers
         {
             var HotelRoom = await _context.GetHotelRoom(HotelID, RoomNumber);
             return HotelRoom;
+
         }
 
         //GET: api/Hotels/{HotelID}/Rooms
@@ -70,6 +73,7 @@ namespace Async_Inn.Controllers
         {
             var currentHotelRoom = await _context.UpdateHotelRoom(HotelID, RoomNumber, hotelroom);
             return hotelroom;
+
         }
     }
 }

@@ -7,6 +7,7 @@
         // GET All
         Task<List<HotelRoomDTO>> GetHotelRooms(int HotelID);
 
+
         // GET Hotel By Id
 
         Task<HotelRoomDTO> GetHotelRoom(int HotelID, int RoomNumber);
