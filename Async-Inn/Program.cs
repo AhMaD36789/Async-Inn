@@ -1,6 +1,9 @@
 using Async_Inn.Data;
+using Async_Inn.Models;
 using Async_Inn.Models.Interfaces;
 using Async_Inn.Models.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 
 namespace Async_Inn
@@ -15,11 +18,17 @@ namespace Async_Inn
             );
             var connString = builder.Configuration
                 .GetConnectionString("DefaultConnection");
+            builder.Services.AddIdentity<User, IdentityRole>(option =>
+            {
+                option.User.RequireUniqueEmail = true;
+            }
+            ).AddEntityFrameworkStores<AsyncInnDBContext>();
             builder.Services
                 .AddDbContext<AsyncInnDBContext>
-                (opions => opions.UseSqlServer(connString));
+            (opions => opions.UseSqlServer(connString));
             builder.Services.AddTransient<IHotel, HotelService>();
             builder.Services.AddTransient<IHotelRoom, HotelRoomService>();
+            builder.Services.AddTransient<IUser, IdentityUserService>();
             builder.Services.AddTransient<IRoom, RoomService>();
             builder.Services.AddTransient<IAminity, AminityService>();
             builder.Services.AddSwaggerGen(options =>
@@ -41,6 +50,7 @@ namespace Async_Inn
             app.MapGet("/", () => "Hello World!");
             app.MapControllers();
             app.Run();
+
         }
     }
 }

@@ -7,7 +7,7 @@
 namespace Async_Inn.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedRoomAmenity : Migration
+    public partial class initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,33 @@ namespace Async_Inn.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HotelRooms",
+                columns: table => new
+                {
+                    HotelID = table.Column<int>(type: "int", nullable: false),
+                    RoomNumber = table.Column<int>(type: "int", nullable: false),
+                    RoomID = table.Column<int>(type: "int", nullable: false),
+                    Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PetFriendly = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HotelRooms", x => new { x.HotelID, x.RoomNumber });
+                    table.ForeignKey(
+                        name: "FK_HotelRooms_Hotels_HotelID",
+                        column: x => x.HotelID,
+                        principalTable: "Hotels",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HotelRooms_Rooms_RoomID",
+                        column: x => x.RoomID,
+                        principalTable: "Rooms",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,6 +139,11 @@ namespace Async_Inn.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_HotelRooms_RoomID",
+                table: "HotelRooms",
+                column: "RoomID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoomAmenities_AmenityID",
                 table: "RoomAmenities",
                 column: "AmenityID");
@@ -121,10 +153,13 @@ namespace Async_Inn.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Hotels");
+                name: "HotelRooms");
 
             migrationBuilder.DropTable(
                 name: "RoomAmenities");
+
+            migrationBuilder.DropTable(
+                name: "Hotels");
 
             migrationBuilder.DropTable(
                 name: "Amenities");

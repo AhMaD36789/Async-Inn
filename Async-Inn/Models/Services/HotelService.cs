@@ -1,28 +1,44 @@
 ﻿using Async_Inn.Data;
 using Async_Inn.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Async_Inn.Models.Services
-
 {
+    /// <summary>
+    /// Represents a service for managing hotel operations.
+    /// </summary>
     public class HotelService : IHotel
     {
         private readonly AsyncInnDBContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotelService"/> class.
+        /// </summary>
+        /// <param name="context">The database context.</param>
         public HotelService(AsyncInnDBContext context)
         {
             _context = context;
         }
 
-
+        /// <summary>
+        /// Creates a new hotel entry.
+        /// </summary>
+        /// <param name="hotel">The hotel data to be created.</param>
+        /// <returns>The created hotel data.</returns>
         public async Task<Hotel> Create(Hotel hotel)
         {
-
             _context.Hotels.Add(hotel);
             await _context.SaveChangesAsync();
             return hotel;
         }
 
+        /// <summary>
+        /// Deletes a hotel based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of the hotel to be deleted.</param>
         public async Task Delete(int id)
         {
             Hotel hotel = await _context.Hotels.FindAsync(id);
@@ -33,7 +49,11 @@ namespace Async_Inn.Models.Services
             }
         }
 
-
+        /// <summary>
+        /// Retrieves hotel details based on its ID.
+        /// </summary>
+        /// <param name="HotelId">The ID of the hotel to retrieve.</param>
+        /// <returns>The hotel data.</returns>
         public async Task<HotelDTO> GetHotel(int HotelId)
         {
             var Hotel = await _context.Hotels.Select(
@@ -67,10 +87,13 @@ namespace Async_Inn.Models.Services
                     }).ToList()
                 }).FirstOrDefaultAsync(h => h.ID == HotelId);
 
-
             return Hotel;
         }
 
+        /// <summary>
+        /// Retrieves a list of all hotels.
+        /// </summary>
+        /// <returns>A list of hotel data.</returns>
         public async Task<List<HotelDTO>> GetHotels()
         {
             var Hotel = await _context.Hotels.Select(
@@ -106,6 +129,12 @@ namespace Async_Inn.Models.Services
             return Hotel;
         }
 
+        /// <summary>
+        /// Updates the details of a hotel.
+        /// </summary>
+        /// <param name="id">The ID of the hotel to update.</param>
+        /// <param name="UpdatedHotel">The updated hotel data.</param>
+        /// <returns>The updated hotel data.</returns>
         public async Task<Hotel> UpdateHotel(int id, Hotel UpdatedHotel)
         {
             Hotel CurrentHotel = await _context.Hotels.FindAsync(id);
@@ -119,10 +148,8 @@ namespace Async_Inn.Models.Services
                 CurrentHotel.Phone = UpdatedHotel.Phone;
                 _context.Entry(CurrentHotel).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-
             }
             return UpdatedHotel;
-
         }
     }
 }
