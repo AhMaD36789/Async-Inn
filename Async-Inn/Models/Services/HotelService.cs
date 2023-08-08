@@ -14,10 +14,8 @@ namespace Async_Inn.Models.Services
             _context = context;
         }
 
-
         public async Task<Hotel> Create(Hotel hotel)
         {
-
             _context.Hotels.Add(hotel);
             await _context.SaveChangesAsync();
             return hotel;
@@ -32,7 +30,6 @@ namespace Async_Inn.Models.Services
                 await _context.SaveChangesAsync();
             }
         }
-
 
         public async Task<HotelDTO> GetHotel(int HotelId)
         {
