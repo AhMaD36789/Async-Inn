@@ -4,15 +4,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Async_Inn.Models.Services
 {
+    /// <summary>
+    /// Represents a service for managing room operations.
+    /// </summary>
     public class RoomService : IRoom
     {
         private readonly AsyncInnDBContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RoomService"/> class.
+        /// </summary>
+        /// <param name="context">The database context.</param>
         public RoomService(AsyncInnDBContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Creates a new room.
+        /// </summary>
+        /// <param name="room">The room data to be created.</param>
+        /// <returns>The created room data.</returns>
 
         public async Task<Room> Create(RoomDTO room)
         {
@@ -29,6 +41,11 @@ namespace Async_Inn.Models.Services
             return newRoom;
         }
 
+        /// <summary>
+        /// Deletes a room based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of the room to be deleted.</param>
+
         public async Task Delete(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
@@ -39,6 +56,11 @@ namespace Async_Inn.Models.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves room details based on its ID.
+        /// </summary>
+        /// <param name="roomId">The ID of the room to retrieve.</param>
+        /// <returns>The room data.</returns>
         public async Task<RoomDTO> GetRoom(int roomId)
         {
             return await _context.Rooms
@@ -58,6 +80,11 @@ namespace Async_Inn.Models.Services
 
                 ).FirstOrDefaultAsync(z => z.ID == roomId);
         }
+
+        /// <summary>
+        /// Retrieves a list of all rooms.
+        /// </summary>
+        /// <returns>A list of room data.</returns>
 
         public async Task<List<RoomDTO>> GetRooms()
         {
@@ -79,6 +106,12 @@ namespace Async_Inn.Models.Services
                 ).ToListAsync();
         }
 
+        /// <summary>
+        /// Updates the details of a room.
+        /// </summary>
+        /// <param name="id">The ID of the room to update.</param>
+        /// <param name="UpdatedRoom">The updated room data.</param>
+        /// <returns>The updated room data.</returns>
 
         public async Task<Room> UpdateRoom(int id, RoomDTO UpdatedRoom)
         {
@@ -92,6 +125,14 @@ namespace Async_Inn.Models.Services
             }
             return CurrentRoom;
         }
+
+        /// <summary>
+        /// Adds an amenity to a room.
+        /// </summary>
+        /// <param name="roomID">The ID of the room.</param>
+        /// <param name="amenityID">The ID of the amenity.</param>
+        /// <returns>The added room amenity data.</returns>
+
         public async Task<RoomAmenity> AddAmenityToRoom(int roomID, int amenityID)
         {
             var roomAmenity = new RoomAmenity()
@@ -106,6 +147,13 @@ namespace Async_Inn.Models.Services
 
             return roomAmenity;
         }
+
+        /// <summary>
+        /// Removes an amenity from a room.
+        /// </summary>
+        /// <param name="roomID">The ID of the room.</param>
+        /// <param name="amenityID">The ID of the amenity.</param>
+
         public async Task RemoveAmenityFromoRoom(int roomID, int amenityID)
         {
             var del = await _context.RoomAmenities.FindAsync(roomID, amenityID);

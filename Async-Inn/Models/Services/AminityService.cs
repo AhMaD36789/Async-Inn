@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Async_Inn.Models.Services
 {
+    /// <summary>
+    /// Provides functionality for managing amenities.
+    /// </summary>
     public class AminityService : IAminity
     {
         private readonly AsyncInnDBContext _context;
@@ -13,6 +16,11 @@ namespace Async_Inn.Models.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Creates a new amenity.
+        /// </summary>
+        /// <param name="amenity">The amenity to create.</param>
+        /// <returns>A task that represents the asynchronous operation of creating an amenity.</returns>
         public async Task<AmenityDTO> Create(AmenityDTO amenity)
         {
             Amenity newAmenity = new Amenity()
@@ -25,6 +33,11 @@ namespace Async_Inn.Models.Services
             return amenity;
         }
 
+        /// <summary>
+        /// Deletes an amenity.
+        /// </summary>
+        /// <param name="id">The ID of the amenity to delete.</param>
+        /// <returns>A task that represents the asynchronous operation of deleting an amenity.</returns>
         public async Task Delete(int id)
         {
             AmenityDTO amenity = await GetAmenity(id);
@@ -38,6 +51,10 @@ namespace Async_Inn.Models.Services
 
         }
 
+        /// <summary>
+        /// Retrieves all amenities.
+        ///</summary>
+        ///<returns>A task that represents the asynchronous operation of retrieving all amenities.</returns> 
         public async Task<List<AmenityDTO>> GetAmenities()
         {
 
@@ -49,6 +66,11 @@ namespace Async_Inn.Models.Services
 
         }
 
+        /// <summary>
+        /// Retrieves an amenity by its ID.
+        ///</summary>
+        ///<param name="amenityId">The ID of the amenity to retrieve.</param>
+        ///<returns>A task that represents the asynchronous operation of retrieving an amenity by its ID.</returns> 
         public async Task<AmenityDTO> GetAmenity(int amenityId)
         {
 
@@ -62,6 +84,12 @@ namespace Async_Inn.Models.Services
                 ).FirstOrDefaultAsync(x => x.ID == amenityId);
         }
 
+        /// <summary>
+        /// Updates an amenity.
+        ///</summary>
+        ///<param name="id">The ID of the amenity to update.</param>
+        ///<param name="UpdatedAmenity">The updated information for the amenity.</param>
+        ///<returns>A task that represents the asynchronous operation of updating an amenity.</returns> 
         public async Task<Amenity> UpdateAmenity(int id, AmenityDTO UpdatedAmenity)
         {
             var CurrentAmenity = await GetAmenity(id);
