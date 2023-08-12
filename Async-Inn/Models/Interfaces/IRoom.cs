@@ -58,5 +58,7 @@ namespace Async_Inn.Models.Interfaces
         ///<param name="amenityID">The ID of the amenity to remove from the room.</param>
         ///<returns>A task that represents the asynchronous operation of removing an amenity from a room.</returns> 
         Task RemoveAmenityFromoRoom(int roomID, int amenityID);
+
+
     }
 }

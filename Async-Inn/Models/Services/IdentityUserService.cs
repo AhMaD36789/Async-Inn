@@ -1,6 +1,7 @@
 ﻿using Async_Inn.Models.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Async_Inn.Models.Services
@@ -10,15 +11,17 @@ namespace Async_Inn.Models.Services
     /// </summary>
     public class IdentityUserService : IUser
     {
-        private UserManager<User> _manager;
+        private JwtTokenService _tokenService;
+        private UserManager<User> _userManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityUserService"/> class.
         /// </summary>
         /// <param name="userManager">The user manager instance.</param>
-        public IdentityUserService(UserManager<User> userManager)
+        public IdentityUserService(UserManager<User> userManager, JwtTokenService tokenService)
         {
-            _manager = userManager;
+            _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         /// <summary>
@@ -27,7 +30,7 @@ namespace Async_Inn.Models.Services
         /// <param name="registerDTO">The registration data.</param>
         /// <param name="ModelState">The model state dictionary for validation errors.</param>
         /// <returns>The registered user's data.</returns>
-        public async Task<UserDTO> Register(RegisterDTO registerDTO, ModelStateDictionary ModelState)
+        public async Task<UserDTO> Register(RegisterDTO registerDTO, ModelStateDictionary ModelState, ClaimsPrincipal claimsPrincipal)
         {
             var user = new User()
             {
@@ -35,14 +38,18 @@ namespace Async_Inn.Models.Services
                 Email = registerDTO.Email,
                 PhoneNumber = registerDTO.PhoneNumber
             };
-            var result = await _manager.CreateAsync(user, registerDTO.password);
+            var result = await _userManager.CreateAsync(user, registerDTO.password);
 
             if (result.Succeeded)
             {
+                _userManager.AddToRolesAsync(user, registerDTO.Roles);
+
                 return new UserDTO()
                 {
                     ID = user.Id,
-                    Username = user.UserName
+                    Username = user.UserName,
+                    Token = await _tokenService.GetToken(user, System.TimeSpan.FromMinutes(45)),
+                    Roles = await _userManager.GetRolesAsync(user)
                 };
             }
 
@@ -66,11 +73,29 @@ namespace Async_Inn.Models.Services
         /// <returns>The authenticated user's data if successful, otherwise null.</returns>
         public async Task<UserDTO> Authenticate(string username, string password)
         {
-            var user = await _manager.FindByNameAsync(username);
-            var validPassword = await _manager.CheckPasswordAsync(user, password);
+            var user = await _userManager.FindByNameAsync(username);
+            var validPassword = await _userManager.CheckPasswordAsync(user, password);
             if (validPassword)
-                return new UserDTO() { ID = user.Id, Username = user.UserName };
+                return new UserDTO()
+                {
+                    ID = user.Id,
+                    Username = user.UserName,
+                    Token = await _tokenService.GetToken(user, System.TimeSpan.FromMinutes(5)),
+                    Roles = await _userManager.GetRolesAsync(user)
+                };
             return null;
+        }
+
+        public async Task<UserDTO> GetUser(ClaimsPrincipal principal)
+        {
+            var user = await _userManager.GetUserAsync(principal);
+            return new UserDTO
+            {
+                ID = user.Id,
+                Username = user.UserName,
+                Token = await _tokenService.GetToken(user, System.TimeSpan.FromMinutes(5)),
+                Roles = await _userManager.GetRolesAsync(user)
+            };
         }
     }
 }

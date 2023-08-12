@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Security.Claims;
 
 namespace Async_Inn.Models.Interfaces
 {
@@ -13,7 +14,7 @@ namespace Async_Inn.Models.Interfaces
         /// <param name="registerDTO">The registration information of the new user.</param>
         /// <param name="ModelState">The model state dictionary to validate the registration information.</param>
         /// <returns>A task that represents the asynchronous operation of registering a new user.</returns>
-        public Task<UserDTO> Register(RegisterDTO registerDTO, ModelStateDictionary ModelState);
+        public Task<UserDTO> Register(RegisterDTO registerDTO, ModelStateDictionary ModelState, ClaimsPrincipal claimsPrincipal);
 
         /// <summary>
         /// Authenticates a user.
@@ -22,5 +23,7 @@ namespace Async_Inn.Models.Interfaces
         /// <param name="password">The password of the user to authenticate.</param>
         /// <returns>A task that represents the asynchronous operation of authenticating a user.</returns>
         public Task<UserDTO> Authenticate(string username, string password);
+
+        public Task<UserDTO> GetUser(ClaimsPrincipal principal);
     }
 }

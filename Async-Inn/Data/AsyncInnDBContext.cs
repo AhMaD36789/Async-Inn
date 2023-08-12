@@ -49,6 +49,32 @@ namespace Async_Inn.Data
                     key.RoomNumber
                 });
 
+            SeedRoles(modelBuilder, "DistrictManager", "create", "update", "delete", "read");
+            SeedRoles(modelBuilder, "PropertyManager", "create", "update", "read");
+            SeedRoles(modelBuilder, "Agent", "update", "read");
+            SeedRoles(modelBuilder, "AnonymousUsers", "read");
+
+        }
+        private int id = 1;
+        private void SeedRoles(ModelBuilder modelBuilder, string roleName, params string[] permissions)
+        {
+            var role = new IdentityRole()
+            {
+                Id = roleName.ToLower(),
+                Name = roleName,
+                NormalizedName = roleName.ToUpper(),
+                ConcurrencyStamp = Guid.Empty.ToString()
+            };
+            modelBuilder.Entity<IdentityRole>().HasData(role);
+            var RoleClaims = permissions.Select(permissions =>
+            new IdentityRoleClaim<string>
+            {
+                Id = id++,
+                RoleId = role.Id,
+                ClaimType = "persmissions",
+                ClaimValue = permissions
+            }).ToArray();
+            modelBuilder.Entity<IdentityRoleClaim<string>>().HasData(RoleClaims);
         }
 
         public DbSet<Hotel> Hotels { get; set; }
