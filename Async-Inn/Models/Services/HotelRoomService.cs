@@ -134,6 +134,7 @@ namespace Async_Inn.Models.Services
                 ).ToListAsync();
 
             return HotelRooms;
+
         }
         /// <summary>
         /// Updates the details of a hotel room.
@@ -149,6 +150,7 @@ namespace Async_Inn.Models.Services
             if (CurrentHotelRoom != null)
             {
                 CurrentHotelRoom.HotelID = hotelroom.HotelID;
+
                 CurrentHotelRoom.RoomNumber = hotelroom.RoomNumber;
                 CurrentHotelRoom.RoomID = hotelroom.RoomID;
                 CurrentHotelRoom.Rate = hotelroom.Rate;

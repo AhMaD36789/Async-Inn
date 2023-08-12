@@ -102,6 +102,7 @@ namespace Async_Inn.Models.Services
                     Name = UpdatedAmenity.Name
                 };
                 _context.Entry(newCurrent).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
             }
             return newCurrent;

@@ -79,6 +79,7 @@ namespace Async_Inn.Models.Services
                 }
 
                 ).FirstOrDefaultAsync(z => z.ID == roomId);
+
         }
 
         /// <summary>
@@ -116,6 +117,7 @@ namespace Async_Inn.Models.Services
         public async Task<Room> UpdateRoom(int id, RoomDTO UpdatedRoom)
         {
             var CurrentRoom = await _context.Rooms.FindAsync(id);
+
             if (CurrentRoom != null)
             {
                 CurrentRoom.Name = UpdatedRoom.Name;
@@ -139,10 +141,8 @@ namespace Async_Inn.Models.Services
             {
                 RoomID = roomID,
                 AmenityID = amenityID
-
             };
             _context.RoomAmenities.Add(roomAmenity);
-
             await _context.SaveChangesAsync();
 
             return roomAmenity;
@@ -157,9 +157,7 @@ namespace Async_Inn.Models.Services
         public async Task RemoveAmenityFromoRoom(int roomID, int amenityID)
         {
             var del = await _context.RoomAmenities.FindAsync(roomID, amenityID);
-
             _context.Entry<RoomAmenity>(del).State = EntityState.Deleted;
-
             await _context.SaveChangesAsync();
         }
     }
