@@ -4,6 +4,7 @@ using Async_Inn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Async_Inn.Migrations
 {
     [DbContext(typeof(AsyncInnDBContext))]
-    partial class AsyncInnDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230812201155_AddedParamsToSeedRoles")]
+    partial class AddedParamsToSeedRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,78 +352,6 @@ namespace Async_Inn.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 11,
-                            ClaimType = "persmissions",
-                            ClaimValue = "create",
-                            RoleId = "districtmanager"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ClaimType = "persmissions",
-                            ClaimValue = "update",
-                            RoleId = "districtmanager"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ClaimType = "persmissions",
-                            ClaimValue = "delete",
-                            RoleId = "districtmanager"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            ClaimType = "persmissions",
-                            ClaimValue = "read",
-                            RoleId = "districtmanager"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            ClaimType = "persmissions",
-                            ClaimValue = "create",
-                            RoleId = "propertymanager"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            ClaimType = "persmissions",
-                            ClaimValue = "update",
-                            RoleId = "propertymanager"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            ClaimType = "persmissions",
-                            ClaimValue = "read",
-                            RoleId = "propertymanager"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            ClaimType = "persmissions",
-                            ClaimValue = "update",
-                            RoleId = "agent"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            ClaimType = "persmissions",
-                            ClaimValue = "read",
-                            RoleId = "agent"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            ClaimType = "persmissions",
-                            ClaimValue = "read",
-                            RoleId = "anonymoususers"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>

@@ -1,9 +1,16 @@
 ﻿using Async_Inn.Data;
+using Async_Inn.Models;
 using Async_Inn.Models.Interfaces;
 using Async_Inn.Models.Services;
-using Async_Inn.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Moq;
 
 namespace AsyncInnTest
 {
@@ -13,7 +20,10 @@ namespace AsyncInnTest
 
 
         protected readonly AsyncInnDBContext _db;
-        protected readonly IRoom _room;
+        protected readonly IAminity _am;
+        protected readonly JwtTokenService _JwtTokenService;
+        private readonly UserManager<User> _userManager;
+        protected readonly IUser _user;
 
         public Mock()
         {
@@ -26,55 +36,18 @@ namespace AsyncInnTest
 
 
             _db.Database.EnsureCreated();
-
-            _room = new RoomService(_db);
+            _user = new IdentityUserService(_userManager, _JwtTokenService);
         }
 
-        protected async Task<Amenity> CreateAndSaveAmenity()
+        protected static IUser SetupUserMock(UserDTO expectedResult)
         {
-            Amenity amenity = new Amenity()
-            {
-                Name = "Test"
-            };
-            _db.Amenities.Add(amenity);
-            await _db.SaveChangesAsync();
+            var userMock = new Mock<IUser>();
 
-            return amenity;
-        }
 
-        protected async Task<Amenity> CreateAndSaveAmenity2()
-        {
-            Amenity amenity = new Amenity()
-            {
-                Name = "Test1"
-            };
-            _db.Amenities.Add(amenity);
-            await _db.SaveChangesAsync();
+            userMock.Setup(u => u.Authenticate(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(expectedResult);
 
-            return amenity;
-        }
-
-        protected async Task<Room> CreateAndSaveRoom()
-        {
-            Room room = new Room()
-            {
-                Name = "Test",
-                Layout = 1
-            };
-            _db.Rooms.Add(room);
-            await _db.SaveChangesAsync();
-            return room;
-        }
-        protected async Task<Room> CreateAndSaveRoom2()
-        {
-            Room room = new Room()
-            {
-                Name = "Test1",
-                Layout = 2
-            };
-            _db.Rooms.Add(room);
-            await _db.SaveChangesAsync();
-            return room;
+            return userMock.Object;
         }
 
         protected async Task<Hotel> CreateAndSaveHotel()

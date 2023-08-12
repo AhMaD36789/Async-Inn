@@ -4,5 +4,6 @@ namespace Async_Inn.Models
 {
     public class User : IdentityUser
     {
+
     }
 }

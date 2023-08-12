@@ -1,5 +1,6 @@
 ﻿using Async_Inn.Models;
 using Async_Inn.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace Async_Inn.Controllers
             userService = service;
         }
 
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO data)
         {
@@ -25,6 +27,7 @@ namespace Async_Inn.Controllers
 
             return BadRequest(new ValidationProblemDetails(ModelState));
         }
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
         {
@@ -36,6 +39,12 @@ namespace Async_Inn.Controllers
             }
 
             return BadRequest(new ValidationProblemDetails(ModelState));
+        }
+        [Authorize(Roles = "DistrictManager, PropertyManager, Agent")]
+        [HttpGet("profile")]
+        public async Task<ActionResult<UserDTO>> Profile()
+        {
+            return await userService.GetUser(this.User);
         }
     }
 }
