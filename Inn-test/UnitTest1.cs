@@ -50,7 +50,7 @@ namespace Inn_test
                 Roles = new List<string> { "Agent" } // Adjust the roles as needed
             };
 
-            userMock.Setup(u => u.Register(It.IsAny<RegisterDTO>(), It.IsAny<ModelStateDictionary>(), It.IsAny<ClaimsPrincipal>()))
+            userMock.Setup(u => u.Register(It.IsAny<RegisterDTO>(), It.IsAny<ModelStateDictionary>()))
                             .ReturnsAsync(expectedResult);
 
             // Act

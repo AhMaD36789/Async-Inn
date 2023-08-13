@@ -30,7 +30,7 @@ namespace Async_Inn.Models.Services
         /// <param name="registerDTO">The registration data.</param>
         /// <param name="ModelState">The model state dictionary for validation errors.</param>
         /// <returns>The registered user's data.</returns>
-        public async Task<UserDTO> Register(RegisterDTO registerDTO, ModelStateDictionary ModelState, ClaimsPrincipal claimsPrincipal)
+        public async Task<UserDTO> Register(RegisterDTO registerDTO, ModelStateDictionary ModelState)
         {
             var user = new User()
             {
