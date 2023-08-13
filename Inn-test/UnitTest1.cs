@@ -1,3 +1,4 @@
+
 using Async_Inn.Controllers;
 using Async_Inn.Models;
 using Async_Inn.Models.Interfaces;
@@ -11,8 +12,10 @@ using System.Security.Claims;
 
 namespace Inn_test
 {
-    public class UnitTest1
+    public class UnitTest1 : Mock
     {
+
+        // room and amenity
         [Fact]
         public async Task Register_User_As_District_Manager()
         {
@@ -62,6 +65,7 @@ namespace Inn_test
 
             Assert.Equal(expectedResult.Username, userDto.Username);
             Assert.Equal(expectedResult.Roles, userDto.Roles);
+
 
         }
     }
