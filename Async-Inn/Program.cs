@@ -4,7 +4,6 @@ using Async_Inn.Models.Interfaces;
 using Async_Inn.Models.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 
 namespace Async_Inn

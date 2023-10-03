@@ -75,7 +75,7 @@ namespace Async_Inn.Models.Services
                         {
                             ID = hr.Room.ID,
                             Name = hr.Room.Name,
-                            Layout = hr.Room.Layout,
+                            Layout = (int)hr.Room.Layout,
                             Amenities = hr.Room.RoomAminities
                             .Select(a => new AmenityDTO
                             {
@@ -89,6 +89,7 @@ namespace Async_Inn.Models.Services
 
             return Hotel;
         }
+
 
         /// <summary>
         /// Retrieves a list of all hotels.
@@ -115,7 +116,7 @@ namespace Async_Inn.Models.Services
                         {
                             ID = hr.Room.ID,
                             Name = hr.Room.Name,
-                            Layout = hr.Room.Layout,
+                            Layout = (int)hr.Room.Layout,
                             Amenities = hr.Room.RoomAminities
                             .Select(a => new AmenityDTO
                             {
@@ -128,6 +129,7 @@ namespace Async_Inn.Models.Services
                 }).ToListAsync();
             return Hotel;
         }
+
 
         /// <summary>
         /// Updates the details of a hotel.

@@ -1,8 +1,7 @@
 ﻿using Async_Inn.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace Async_Inn.Data
 {
@@ -24,10 +23,11 @@ namespace Async_Inn.Data
             );
 
             modelBuilder.Entity<Room>().HasData(
-                new Room() { ID = 1, Name = "PogChamp", Layout = 1 },
-                new Room() { ID = 2, Name = "PeepoPlanket", Layout = 2 },
-                new Room() { ID = 3, Name = "YEP", Layout = 3 }
-            );
+    new Room() { ID = 1, Name = "PogChamp", Layout = Layout.Studio },
+    new Room() { ID = 2, Name = "PeepoPlanket", Layout = Layout.OneBedroom },
+    new Room() { ID = 3, Name = "YEP", Layout = Layout.TwoBedroom }
+);
+
 
             modelBuilder.Entity<Amenity>().HasData(
                 new Amenity() { ID = 1, Name = "Free soap" },

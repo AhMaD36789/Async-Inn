@@ -32,7 +32,7 @@ namespace Async_Inn.Models.Services
             {
                 ID = room.ID,
                 Name = room.Name,
-                Layout = room.Layout
+                Layout = (Layout)room.Layout
             };
 
             _context.Rooms.Add(newRoom);
@@ -40,6 +40,7 @@ namespace Async_Inn.Models.Services
             room.ID = newRoom.ID;
             return newRoom;
         }
+
 
         /// <summary>
         /// Deletes a room based on its ID.
@@ -68,7 +69,7 @@ namespace Async_Inn.Models.Services
                 {
                     ID = x.ID,
                     Name = x.Name,
-                    Layout = x.Layout,
+                    Layout = (int)x.Layout,
                     Amenities = x.RoomAminities
                    .Select(y => new AmenityDTO()
                    {
@@ -79,13 +80,7 @@ namespace Async_Inn.Models.Services
                 }
 
                 ).FirstOrDefaultAsync(z => z.ID == roomId);
-
         }
-
-        /// <summary>
-        /// Retrieves a list of all rooms.
-        /// </summary>
-        /// <returns>A list of room data.</returns>
 
         public async Task<List<RoomDTO>> GetRooms()
         {
@@ -94,7 +89,7 @@ namespace Async_Inn.Models.Services
                 {
                     ID = x.ID,
                     Name = x.Name,
-                    Layout = x.Layout,
+                    Layout = (int)x.Layout,
                     Amenities = x.RoomAminities
                    .Select(y => new AmenityDTO()
                    {
@@ -121,12 +116,13 @@ namespace Async_Inn.Models.Services
             if (CurrentRoom != null)
             {
                 CurrentRoom.Name = UpdatedRoom.Name;
-                CurrentRoom.Layout = UpdatedRoom.Layout;
+                CurrentRoom.Layout = (Layout)UpdatedRoom.Layout;
                 _context.Entry(CurrentRoom).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             return CurrentRoom;
         }
+
 
         /// <summary>
         /// Adds an amenity to a room.

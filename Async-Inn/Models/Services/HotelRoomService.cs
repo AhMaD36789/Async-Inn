@@ -90,7 +90,7 @@ namespace Async_Inn.Models.Services
                     {
                         ID = hrDTO.Room.ID,
                         Name = hrDTO.Room.Name,
-                        Layout = hrDTO.Room.Layout,
+                        Layout = (int)hrDTO.Room.Layout,
 
                         Amenities = hrDTO.Room.RoomAminities.Select(amDTO => new AmenityDTO()
                         {
@@ -103,6 +103,7 @@ namespace Async_Inn.Models.Services
 
             return HotelRoom;
         }
+
         /// <summary>
         /// Retrieves a list of hotel rooms associated with a specific hotel.
         /// </summary>
@@ -111,6 +112,7 @@ namespace Async_Inn.Models.Services
         public async Task<List<HotelRoomDTO>> GetHotelRooms(int HotelID)
         {
             var HotelRooms = await _context.HotelRooms
+                .Where(hr=> hr.HotelID == HotelID)
                 .Select(x => new HotelRoomDTO()
                 {
                     HotelID = x.HotelID,
@@ -122,7 +124,7 @@ namespace Async_Inn.Models.Services
                     {
                         ID = x.Room.ID,
                         Name = x.Room.Name,
-                        Layout = x.Room.Layout,
+                        Layout = (int)x.Room.Layout,
 
                         Amenities = x.Room.RoomAminities.Select(y => new AmenityDTO()
                         {
@@ -134,8 +136,8 @@ namespace Async_Inn.Models.Services
                 ).ToListAsync();
 
             return HotelRooms;
-
         }
+
         /// <summary>
         /// Updates the details of a hotel room.
         /// </summary>

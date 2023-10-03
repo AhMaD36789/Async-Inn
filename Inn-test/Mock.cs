@@ -17,13 +17,8 @@ namespace AsyncInnTest
     public abstract class Mock : IDisposable
     {
         private readonly SqliteConnection _connection;
-
-
         protected readonly AsyncInnDBContext _db;
         protected readonly IAminity _am;
-        protected readonly JwtTokenService _JwtTokenService;
-        private readonly UserManager<User> _userManager;
-        protected readonly IUser _user;
 
         public Mock()
         {
@@ -33,21 +28,7 @@ namespace AsyncInnTest
             _db = new AsyncInnDBContext(
                 new DbContextOptionsBuilder<AsyncInnDBContext>()
                 .UseSqlite(_connection).Options);
-
-
             _db.Database.EnsureCreated();
-            _user = new IdentityUserService(_userManager, _JwtTokenService);
-        }
-
-        protected static IUser SetupUserMock(UserDTO expectedResult)
-        {
-            var userMock = new Mock<IUser>();
-
-
-            userMock.Setup(u => u.Authenticate(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(expectedResult);
-
-            return userMock.Object;
         }
 
         protected async Task<Hotel> CreateAndSaveHotel()
@@ -88,10 +69,6 @@ namespace AsyncInnTest
             return hotel;
 
         }
-
-
-
-
 
         public void Dispose()
         {
